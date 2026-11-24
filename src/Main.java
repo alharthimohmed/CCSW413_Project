@@ -11,7 +11,7 @@ public class Main {
         Teacher maria = new Teacher(3, "Maria Williams", 600);
 
         // Creating a list of teachers and adding the teacher objects to the list
-        List<Teacher> teacherList = new ArrayList<>();
+        List<Employee> teacherList = new ArrayList<>();
         teacherList.add(john);
         teacherList.add(alice);
         teacherList.add(maria);
@@ -32,7 +32,7 @@ public class Main {
 
         // Adding another teacher to the school
         Teacher sophia = new Teacher(4, "Sophia Martinez", 900);
-        ghs.addTeacher(sophia);
+        ghs.addEmployee(sophia);
 
         // Students paying fees
         ethan.payFees(5000);  // Ethan pays $5000
@@ -55,5 +55,40 @@ public class Main {
         // Alice receives her salary
         alice.receiveSalary(alice.getSalary());
         System.out.println(alice);
+
+
+
+        // ===================== Composite + Decorator =====================
+        System.out.println("\n===== Composite & Decorator demo =====");
+
+        // معلم عادي ننشئه من الـ Factory
+        Employee omar = new TeacherCreator().creatPerson(5, "Omar Ali", 500);
+
+        // معلمة ملفوفة بثلاث طبقات: ماجستير + بدل تربوي + دور
+        Employee sara = new Teacher(6, "Sara Ahmed", 700, 3);
+        sara = new MasterDegreeDecorator(sara);                       // +300 راتب، +2 خبرة
+        sara = new EducationalAllowanceDecorator(sara);               // +200 راتب
+        sara = new RoleDecorator(sara, "Head of Math Department");    // الدور كنص
+
+        System.out.println("Sara salary: " + sara.getSalary());
+        System.out.println("Sara experience: " + sara.getExperienceYears());
+        System.out.println("Sara role: " + sara.getRole());
+        System.out.println(sara);
+
+        // مدير فريقه معلمين
+        Manager khaled = new Manager(7, "Khaled Hassan", 1500, 10);
+        khaled.add(omar);
+        khaled.add(sara);
+
+        // مدير أعلى فريقه فيه المدير الأول + معلمة (شجرة داخل شجرة)
+        Manager principal = new Manager(8, "Principal Nasser", 2500, 15);
+        principal.add(khaled);
+        principal.add(new Teacher(9, "Huda Saleh", 600, 2));
+
+        System.out.println("Principal total salary: " + principal.getTotalSalary());
+
+        int spentBefore = ghs.getTotalMoneySpent();
+        principal.paySalary();   // نداء واحد يدفع للكل
+        System.out.println("Spent by paySalary(): " + (ghs.getTotalMoneySpent() - spentBefore));
     }
 }

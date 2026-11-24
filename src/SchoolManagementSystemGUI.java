@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,11 +14,12 @@ public class SchoolManagementSystemGUI {
     private School school;  // School object to manage teachers and students
     private JTextArea outputArea;  // Text area for displaying output messages
     private JComboBox<Student> studentComboBox;  // Combo box for selecting students
-    private JComboBox<Teacher> teacherComboBox;  // Combo box for selecting teachers
+    private JComboBox<Employee> teacherComboBox;  // ★ تعديل: كان JComboBox<Teacher> — الحين يقبل معلم أو مدير أو معلم ملفوف بـ Decorator
+    private JComboBox<Manager> managerComboBox;  // ★ جديد: قائمة المدراء (عشان نختار مدير ونضيف له فريق)
 
     public SchoolManagementSystemGUI() {
         // Initialize lists of teachers and students
-        List<Teacher> teacherList = new ArrayList<>();
+        List<Employee> teacherList = new ArrayList<>();   // ★ تعديل: كان List<Teacher>
         List<Student> studentList = new ArrayList<>();
         school = new School(teacherList, studentList);
         initUI();  // Initialize the user interface
@@ -28,7 +28,7 @@ public class SchoolManagementSystemGUI {
     private void initUI() {
         // Create the main frame
         JFrame frame = new JFrame("School Management System");
-        frame.setSize(600, 500);
+        frame.setSize(600, 560);   // ★ تعديل: كبّرنا النافذة عشان الصفوف الجديدة (كانت 600, 500)
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create the main panel and set layout
@@ -84,42 +84,93 @@ public class SchoolManagementSystemGUI {
         addTeacherButton.setBounds(330, 40, 150, 25);
         panel.add(addTeacherButton);
 
+        // ★ جديد: خيارات المعلم (Decorator) — ماجستير، بدل تربوي، ودور كنص
+        JCheckBox masterCheckBox = new JCheckBox("Master's degree");
+        masterCheckBox.setBounds(10, 70, 130, 25);
+        panel.add(masterCheckBox);
+
+        JCheckBox allowanceCheckBox = new JCheckBox("Edu. allowance");
+        allowanceCheckBox.setBounds(145, 70, 130, 25);
+        panel.add(allowanceCheckBox);
+
+        JLabel roleLabel = new JLabel("Role:");
+        roleLabel.setBounds(285, 70, 40, 25);
+        panel.add(roleLabel);
+
+        JTextField roleField = new JTextField(20);
+        roleField.setBounds(330, 70, 150, 25);
+        panel.add(roleField);
+
+        // ★ جديد: صف إضافة مدير (Composite)
+        JLabel managerLabel = new JLabel("Add Manager:");
+        managerLabel.setBounds(10, 100, 90, 25);
+        panel.add(managerLabel);
+
+        JTextField managerNameField = new JTextField(20);
+        managerNameField.setBounds(100, 100, 160, 25);
+        panel.add(managerNameField);
+
+        JTextField managerSalaryField = new JTextField(20);
+        managerSalaryField.setBounds(270, 100, 50, 25);
+        panel.add(managerSalaryField);
+
+        JButton addManagerButton = new JButton("Add Manager");
+        addManagerButton.setBounds(330, 100, 150, 25);
+        panel.add(addManagerButton);
+
         // Add select student label
         JLabel selectStudentLabel = new JLabel("Select Student:");
-        selectStudentLabel.setBounds(10, 70, 100, 25);
+        selectStudentLabel.setBounds(10, 130, 100, 25);   // ★ تعديل: نزلنا الصف (كان y=70)
         panel.add(selectStudentLabel);
 
         // Add student combo box
         studentComboBox = new JComboBox<>();
-        studentComboBox.setBounds(120, 70, 160, 25);
+        studentComboBox.setBounds(120, 130, 160, 25);   // ★ تعديل: نزلنا الصف (كان y=70)
         panel.add(studentComboBox);
 
         // Add pay fees button
         JButton payFeesButton = new JButton("Pay Fees");
-        payFeesButton.setBounds(290, 70, 100, 25);
+        payFeesButton.setBounds(290, 130, 100, 25);   // ★ تعديل: نزلنا الصف (كان y=70)
         panel.add(payFeesButton);
 
         // Add select teacher label
-        JLabel selectTeacherLabel = new JLabel("Select Teacher:");
-        selectTeacherLabel.setBounds(10, 100, 100, 25);
+        JLabel selectTeacherLabel = new JLabel("Select Employee:");   // ★ تعديل: كان "Select Teacher:" لأن القائمة صارت تشمل المدراء
+        selectTeacherLabel.setBounds(10, 160, 110, 25);   // ★ تعديل: نزلنا الصف وكبّرنا العرض (كان 10, 100, 100, 25)
         panel.add(selectTeacherLabel);
 
         // Add teacher combo box
         teacherComboBox = new JComboBox<>();
-        teacherComboBox.setBounds(120, 100, 160, 25);
+        teacherComboBox.setBounds(120, 160, 160, 25);   // ★ تعديل: نزلنا الصف (كان y=100)
         panel.add(teacherComboBox);
 
         // Add pay salary button
         JButton paySalaryButton = new JButton("Pay Salary");
-        paySalaryButton.setBounds(290, 100, 100, 25);
+        paySalaryButton.setBounds(290, 160, 100, 25);   // ★ تعديل: نزلنا الصف (كان y=100)
         panel.add(paySalaryButton);
+
+        // ★ جديد: صف المدير والفريق (Composite)
+        JLabel selectManagerLabel = new JLabel("Select Manager:");
+        selectManagerLabel.setBounds(10, 190, 110, 25);
+        panel.add(selectManagerLabel);
+
+        managerComboBox = new JComboBox<>();
+        managerComboBox.setBounds(120, 190, 160, 25);
+        panel.add(managerComboBox);
+
+        JButton addToTeamButton = new JButton("Add to Team");
+        addToTeamButton.setBounds(290, 190, 120, 25);
+        panel.add(addToTeamButton);
+
+        JButton teamTotalButton = new JButton("Team Total");
+        teamTotalButton.setBounds(420, 190, 120, 25);
+        panel.add(teamTotalButton);
 
         // Add output area with scroll pane
         outputArea = new JTextArea();
         outputArea.setEditable(false);  // Make the text area non-editable
 
         JScrollPane scrollPane = new JScrollPane(outputArea);
-        scrollPane.setBounds(10, 140, 560, 300);
+        scrollPane.setBounds(10, 230, 560, 250);   // ★ تعديل: نزلنا منطقة الطباعة (كانت 10, 140, 560, 300)
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         panel.add(scrollPane);
@@ -146,13 +197,91 @@ public class SchoolManagementSystemGUI {
             public void actionPerformed(ActionEvent e) {
                 String name = teacherNameField.getText();
                 int salary = Integer.parseInt(teacherSalaryField.getText());
-                int id = school.getTeachers().size() + 1;
+                int id = school.getEmployees().size() + 1;   // ★ تعديل: كان getTeachers()
 //                Teacher teacher = new Teacher(id, name, salary);
-                Teacher teacher =
-                        teacherCreator.creatPerson(id, name, salary);
-                school.addTeacher(teacher);
-                teacherComboBox.addItem(teacher);
-                outputArea.append("Added teacher: " + name + " (Salary: " + salary + ")\n");
+
+                // ★ تعديل: الـ Factory ينشئ المعلم الأساسي (المتغير صار Employee بدل Teacher)
+                Employee employee = teacherCreator.creatPerson(id, name, salary);
+
+                // ★ جديد: الـ Decorator — نلف المعلم بطبقات حسب اللي اختاره المستخدم
+                if (masterCheckBox.isSelected()) {
+                    employee = new MasterDegreeDecorator(employee);
+                }
+                if (allowanceCheckBox.isSelected()) {
+                    employee = new EducationalAllowanceDecorator(employee);
+                }
+                String role = roleField.getText().trim();
+                if (!role.isEmpty()) {
+                    employee = new RoleDecorator(employee, role);
+                }
+
+                school.addEmployee(employee);            // ★ تعديل: كان school.addTeacher(teacher)
+                teacherComboBox.addItem(employee);
+                // ★ تعديل: الرسالة الحين تعرض الراتب النهائي والخبرة والدور بعد الـ Decorators
+                outputArea.append("Added teacher: " + name
+                        + " (Salary: " + employee.getSalary()
+                        + ", Experience: " + employee.getExperienceYears()
+                        + ", Role: " + employee.getRole() + ")\n");
+            }
+        });
+
+        // ★ جديد: زر إضافة مدير (Composite) — ينشئه الـ Factory
+        addManagerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = managerNameField.getText();
+                int salary = Integer.parseInt(managerSalaryField.getText());
+                int id = school.getEmployees().size() + 1;
+
+                Manager manager = managerCreator.creatPerson(id, name, salary);   // من الـ Factory
+                school.addEmployee(manager);
+                teacherComboBox.addItem(manager);   // عشان نقدر ندفع له راتبه (ويندفع معاه فريقه)
+                managerComboBox.addItem(manager);   // عشان نقدر نضيف له فريق
+                outputArea.append("Added manager: " + name + " (Salary: " + salary + ")\n");
+            }
+        });
+
+        // ★ جديد: زر إضافة الموظف المختار لفريق المدير المختار (Composite)
+        addToTeamButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Manager manager = (Manager) managerComboBox.getSelectedItem();
+                Employee employee = (Employee) teacherComboBox.getSelectedItem();
+
+                if (manager == null || employee == null) {
+                    outputArea.append("Select a manager and an employee first\n");
+                    return;
+                }
+
+                try {
+                    manager.add(employee);   // Composite: المدير يضيف الموظف لفريقه
+                    outputArea.append(employee.getName() + " added to " + manager.getName() + "'s team\n");
+                } catch (IllegalArgumentException ex) {
+                    outputArea.append(ex.getMessage() + "\n");
+                }
+            }
+        });
+
+        // ★ جديد: زر عرض الفريق ومجموع الرواتب (Composite)
+        teamTotalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Manager manager = (Manager) managerComboBox.getSelectedItem();
+
+                if (manager != null) {
+                    StringBuilder members = new StringBuilder();
+                    for (Employee member : manager.getTeam()) {
+                        if (members.length() > 0) {
+                            members.append(", ");
+                        }
+                        members.append(member.getName());
+                    }
+                    String team = members.length() == 0 ? "(empty)" : members.toString();
+
+                    outputArea.append("Team of " + manager.getName() + ": " + team + "\n");
+                    outputArea.append("Total salary for " + manager.getName() + " and the team: $"
+                            + manager.getTotalSalary() + "\n");
+                }
             }
         });
 
@@ -193,14 +322,17 @@ public class SchoolManagementSystemGUI {
 //                    outputArea.append("Paid salary to: " + teacher.getName() + ". Total salary earned: $" + teacher.getSalary() + "\n");
 //                    outputArea.append("Total money spent by school: $" + school.getTotalMoneySpent() + "\n");
 //                    outputArea.append("Remaining money in school: $" + (school.getTotalMoneyEarned() - school.getTotalMoneySpent()) + "\n");
-                Teacher teacher = (Teacher) teacherComboBox.getSelectedItem();
+                // ★ تعديل: كان Teacher، الحين Employee عشان يقبل معلم أو مدير أو معلم ملفوف بـ Decorator
+                Employee employee = (Employee) teacherComboBox.getSelectedItem();
 
-                if (teacher != null) {
+                if (employee != null) {
                     try {
-                        teacher.receiveSalary(teacher.getSalary());
+                        // ★ تعديل: كان teacher.receiveSalary(teacher.getSalary())
+                        // paySalary(): المعلم يدفع لنفسه، والمعلم الملفوف يدفع راتبه مع البدلات، والمدير يدفع لنفسه ولكل فريقه
+                        employee.paySalary();
 
                         outputArea.append(
-                                "Paid salary to: " + teacher.getName() + "\n"
+                                "Paid salary to: " + employee.getName() + " (" + employee.getRole() + ")\n"
                         );
 
                         outputArea.append(
@@ -228,6 +360,10 @@ public class SchoolManagementSystemGUI {
 
     private final TeacherCreator teacherCreator =
             new TeacherCreator();
+
+    // ★ جديد: Factory Method للمدير (نفس فكرة studentCreator و teacherCreator)
+    private final ManagerCreator managerCreator =
+            new ManagerCreator();
 
     public static void main(String[] args) {
         // Run the application

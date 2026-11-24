@@ -3,11 +3,17 @@
  * This class represents a teacher in the school system.
  * It keeps track of teacher's ID, name, salary, and salary earned.
  */
-public class Teacher implements Person {
+public class Teacher implements Employee {
     private int id;
     private String name;
     private int salary;
     private int salaryEarned;
+
+    //
+   // مهم ببكومبوزيت و الديكرينر
+    private int experienceYears;
+
+
 
     /**
      * Constructor to create a new teacher with initial values.
@@ -16,10 +22,15 @@ public class Teacher implements Person {
      * @param salary Salary of the teacher.
      */
     public Teacher(int id, String name, int salary) {
+        this(id, name, salary, 0);   // الكونستركتر القديم خليته عشان TeacherCreator ما ينكسر، والخبرة تبدأ من صفر
+    }
+
+    public Teacher(int id, String name, int salary, int experienceYears) {
         this.id = id;
         this.name = name;
         this.salary = salary;
-        this.salaryEarned = 0; // Initialize salary earned to 0
+        this.salaryEarned = 0;
+        this.experienceYears = experienceYears;
     }
 
     /**
@@ -63,7 +74,7 @@ public class Teacher implements Person {
 //        School.updateTotalMoneySpent(salary); // Update total money spent by the school
 //    }
 
-
+    @Override
     public void receiveSalary(int salary) {
 
         if (salary <= 0) {
@@ -75,6 +86,27 @@ public class Teacher implements Person {
         finance.recordSalary(salary);
 
         salaryEarned += salary;
+    }
+    @Override
+    public int getExperienceYears() {
+        return experienceYears;
+    }
+
+    @Override
+    public String getRole() {
+        return "Teacher";
+    }
+
+    // المعلم "ورقة" (Leaf) في الشجرة، فمجموعه هو راتبه فقط
+    @Override
+    public int getTotalSalary() {
+        return getSalary();
+    }
+
+    // يدفع لنفسه راتبه
+    @Override
+    public void paySalary() {
+        receiveSalary(getSalary());
     }
 
 

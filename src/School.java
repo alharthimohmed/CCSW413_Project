@@ -3,25 +3,26 @@ import java.util.List;
 
 public class School {
 
-    private List<Teacher> teachers;
+    // القائمة الحين تحمل Employee: معلم، مدير، أو معلم ملفوف بـ Decorator
+    private List<Employee> employees;
     private List<Student> students;
 
     public School() {
-        teachers = new ArrayList<>();
+        employees = new ArrayList<>();
         students = new ArrayList<>();
     }
 
-    public School(List<Teacher> teachers, List<Student> students) {
-        this.teachers = teachers;
+    public School(List<Employee> employees, List<Student> students) {
+        this.employees = employees;
         this.students = students;
     }
 
-    public List<Teacher> getTeachers() {
-        return teachers;
+    public List<Employee> getEmployees() {
+        return employees;
     }
 
-    public void addTeacher(Teacher teacher) {
-        teachers.add(teacher);
+    public void addEmployee(Employee employee) {
+        employees.add(employee);
     }
 
     public List<Student> getStudents() {
